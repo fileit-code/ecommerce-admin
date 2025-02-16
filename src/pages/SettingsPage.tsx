@@ -32,17 +32,10 @@ export default function SettingsPage() {
         });
 
         setNotificationsEnabled(true);
-        toast({
-          title: "Notificaciones activadas",
-          description: "Recibirás alertas importantes sobre tus pedidos",
-        });
+        toast.success("Notificaciones activadas");
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudieron activar las notificaciones",
-        variant: "destructive"
-      });
+      toast.error("Hubo un error");
     }
   };
 
