@@ -28,7 +28,7 @@ export default function Orders() {
     <div className="min-h-screen bg-gray-50 p-8">
       <AdminSidebar/>
       <div className="md:ml-64 max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 mt-12 md:mt-0">
           <h1 className="text-3xl font-bold">Gestión de Órdenes</h1>
           <Input
             placeholder="Buscar por teléfono o ID..."
