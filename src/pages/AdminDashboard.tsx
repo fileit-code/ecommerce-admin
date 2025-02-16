@@ -3,8 +3,6 @@ import AdminProductCard from "@/components/AdminProductCard"
 // import { Button } from "@/components/ui/button"
 import { useProduct } from "@/context/ProductContext"
 import { useEffect, useState } from "react"
-// import { messaging } from "@/firebase"
-// import { getToken } from "firebase/messaging"
 import AdminSidebar from "@/components/AdminSidebar"
 
 export interface Product {
@@ -19,28 +17,6 @@ export default function AdminDashboard() {
     const { products, getProducts } = useProduct();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
-    // const handleEnableNotifications = async () => {
-    //     try {
-    //         const permission = await Notification.requestPermission();
-    //         if (permission === 'granted') {
-    //             const token = await getToken(messaging, { 
-    //                 vapidKey: import.meta.env.VITE_VAPID_KEY 
-    //             });
-                
-    //             await fetch('/api/auth/fcm-token', {
-    //                 method: 'PUT',
-    //                 credentials: 'include',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({ token })
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error al activar notificaciones:', error);
-    //     }
-    // };
 
     useEffect(() => {
         getProducts();

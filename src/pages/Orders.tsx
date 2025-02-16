@@ -1,22 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import OrderCard from "@/components/OrderCard";
 import { useOrder } from "@/context/OrderContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 import AdminSidebar from "@/components/AdminSidebar";
 
 export default function Orders() {
   const { orders, loading, error, fetchOrders, deleteOrder } = useOrder();
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchOrders();
   }, []);
-
-  const filteredOrders = orders.filter(order =>
-    order.phoneNumber.includes(searchTerm) ||
-    order.id.toString().includes(searchTerm)
-  );
 
   if (error) return (
     <div className="p-8 text-center text-red-500">
@@ -30,12 +23,6 @@ export default function Orders() {
       <div className="md:ml-64 max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8 mt-12 md:mt-0">
           <h1 className="text-3xl font-bold">Gestión de Órdenes</h1>
-          <Input
-            placeholder="Buscar por teléfono o ID..."
-            className="w-64"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
         </div>
 
         {loading ? (
@@ -46,7 +33,7 @@ export default function Orders() {
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredOrders.map(order => (
+            {orders.map(order => (
               <OrderCard
                 key={order.id}
                 order={order}

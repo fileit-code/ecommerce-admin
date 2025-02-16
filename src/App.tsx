@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn"
 import { OrderProvider } from "./context/OrderContext"
 import Orders from "./pages/Orders"
 import Order from "./pages/Order"
+import SettingsPage from "./pages/SettingsPage"
 
 function App() {
 
@@ -28,7 +29,14 @@ function App() {
               <PrivateRoute>
                 <Orders/>
               </PrivateRoute>} />
-            <Route path="/admin/orders/:id" element={<Order/>} />
+            <Route path="/admin/orders/:id" element={
+              <PrivateRoute>
+                <Order/>
+              </PrivateRoute>} />
+            <Route path="/admin/settings" element={
+              <PrivateRoute>
+                <SettingsPage/>
+              </PrivateRoute>} />
           </Routes>
         </OrderProvider>
       </ProductProvider>

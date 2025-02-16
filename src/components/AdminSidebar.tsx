@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Menu, Package2,  ListOrdered } from "lucide-react"
+import { Menu, Package2,  ListOrdered, Settings } from "lucide-react"
 import { NavLink } from "react-router"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer"
 import { ScrollArea } from "./ui/scroll-area"
@@ -64,6 +64,17 @@ export default function AdminSidebar() {
               <ListOrdered className="h-5 w-5" />
               Ver Órdenes
             </NavLink>
+            <NavLink
+              to="/admin/settings"
+              className={({ isActive }) =>
+                `flex items-center gap-2 rounded-lg px-3 py-2 transition-all ${
+                  isActive ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`
+              }
+            >
+              <Settings className="h-5 w-5" />
+              Configuración
+            </NavLink>
           </ScrollArea>
         </DrawerContent>
 
@@ -102,6 +113,17 @@ export default function AdminSidebar() {
           >
             <ListOrdered className="h-5 w-5" />
             Ver Órdenes
+          </NavLink>
+          <NavLink
+            to="/admin/settings"
+            className={({ isActive }) =>
+              `flex items-center gap-2 rounded-lg px-3 py-2 transition-all ${
+                isActive ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`
+            }
+          >
+            <Settings className="h-5 w-5" />
+            Configuración
           </NavLink>
         </nav>
       </aside>
