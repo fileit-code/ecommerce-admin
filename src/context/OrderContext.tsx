@@ -1,5 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./AuthContext";
+import { useEffect } from "react"
+import { onMessage } from "firebase/messaging"
+import toast from "react-hot-toast";
+import { messaging } from "@/firebase";
+
 
 interface Order {
   id: number;
@@ -120,7 +125,13 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     }
-  };
+  }; 
+  
+  useEffect(()=>{
+    onMessage(messaging, ()=> {{
+      toast('Nuevo Pedido recibido!!')
+    }})
+  }, [])
 
   return (
     <OrderContext.Provider
