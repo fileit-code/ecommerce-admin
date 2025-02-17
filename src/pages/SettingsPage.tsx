@@ -22,7 +22,7 @@ export default function SettingsPage() {
             vapidKey: 'BKaaXFfpqIMpYwDgvxw8VUvdeTA-zGA6q7wbfPoE3NJY8ImL1vEgn3pFIjppa-9vN5uVODIjSu-4e2-m0U-VHKo'
         });
         
-        await fetch('/api/auth/fcm-token', {
+        await fetch('https://ecommerceplantilla-back.fileit-contact.workers.dev/api/auth/fcm-token', {
             method: 'PUT',
             credentials: 'include',
             headers: {
