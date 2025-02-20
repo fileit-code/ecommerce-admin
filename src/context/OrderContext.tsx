@@ -55,30 +55,17 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
       
     setLoading(true);
     try {
-      const response = await fetch(url+"/orders/list/"+user.id, {
+      const response = await fetch(url+"/orders/list/"+user.username, {
         credentials: 'include'
       });
-      console.log(response)
       const data = await response.json();
-      console.log(data)
       
-      if (data.orders) {
-        if (data.orders.length > 1) {
+      if (data.orders.length > 0) {
           setOrders(data.orders.map((order: any) => ({
             ...order,
             paid: order.paid === 1,
             createdAt: new Date(order.createdAt).toISOString()
           })));
-        }
-        else {
-          setOrders([{
-            ...data.orders,
-            paid: data.orders.paid === 1,
-            createdAt: new Date(data.orders.createdAt).toISOString()
-          }])
-        }
-      } else {
-        throw new Error(data.message || "Error fetching orders");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");

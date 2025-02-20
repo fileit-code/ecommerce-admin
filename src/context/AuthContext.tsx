@@ -1,18 +1,36 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { onMessage } from "firebase/messaging";
 import { messaging } from "../firebase";
 
 interface User {
-  id: string;
+  id: number;
   email: string;
+  password: string;
+  username: string;
+  shopname: string;
+  imageUrl: string | null;
+  address: string | null;
+  fcmToken: string | null;
+  createdAt: string;
+};
+
+interface SignUpUserInfo {
+  email: string | null,
+  password: string | null,
+  shopname: string | null,
+  username: string | null,
+  address: string | null,
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  register: () => Promise<boolean>;
+  updateProfile:  (username: string, shopname: string, address: string, imageBase64: string) => Promise<boolean>
   logout: () => Promise<void>;
-}
+  signUpInfo: SignUpUserInfo;
+  setSignUpInfo: React.Dispatch<React.SetStateAction<SignUpUserInfo>>;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -24,20 +42,27 @@ export const useAuth = () => {
 
 interface AuthProviderProps {
   children: ReactNode;
-}
+};
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [signUpInfo, setSignUpInfo] = useState<SignUpUserInfo>({
+    email:  null,
+    password: null,
+    shopname: null,
+    username: null,
+    address: null,
+  })
   const url =  'https://ecommerceplantilla-back.fileit-contact.workers.dev/api';
 
-  const login = async (email: string, password: string) => {
+  const register = async () => {
     setLoading(true);
     try {
-      const response = await fetch(url+'/auth/login', {
+      const response = await fetch(url+'/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ ...signUpInfo }),
         credentials: 'include'
       });
 
@@ -57,20 +82,44 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = async () => {
-    setLoading(true);
+  const updateProfile = async (username: string, shopname: string, address: string, imageBase64: string)=> {
     try {
-      await fetch(url+'/auth/logout', {
-        method: 'DELETE',
+      const response = await fetch(url+'/auth/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, shopname, address, imageBase64 }),
         credentials: 'include'
       });
-      setUser(null);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+        return true;
+      }
+
+      const data = await response.json();
+      setUser(user ? { ...user, shopname: data.user.shopname, username: data.user.username, address: data.user.address } : null);
+      return true;
     } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setLoading(false);
+      console.error('Login error:', error);
+      throw error;
     }
+  }
+
+  const logout = async () => {
+    // setLoading(true);
+    // try {
+    //   await fetch(url+'/auth/logout', {
+    //     method: 'DELETE',
+    //     credentials: 'include'
+    //   });
+    //   setUser(null);
+    // } catch (error) {
+    //   console.error('Logout error:', error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
+
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -79,6 +128,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           credentials: 'include'
         });
         const data = await response.json();
+        console.log(data);
         setUser(data.user);
       } catch (error) {
         console.error('Auth check error:', error);
@@ -98,15 +148,23 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       if (payload.notification) {
         new Notification(payload.notification.title ?? 'Notification', {
           body: payload.notification.body ?? '',
-          icon: '/logo.png'
+          // icon: '/logo.png'
         });
       }
-      
     });
   }, []);
 
   return ( 
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider 
+    value={{ 
+      user,
+      loading,
+      register, 
+      updateProfile,
+      logout,
+      signUpInfo,
+      setSignUpInfo
+    }}>
       {children}
     </AuthContext.Provider>
   );

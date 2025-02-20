@@ -36,7 +36,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const getProducts = async () => {
     if (user) {   
       try {
-        const response = await fetch(url+'/products/list/'+ user.id,{
+        const response = await fetch(url+'/products/list/'+ user.username,{
           credentials: 'include'
         });
         const data = await response.json();
@@ -85,7 +85,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
             price, 
             description,
             image,
-            userId: user.id
+            username: user.username
           }),
         });
         console.log(response)
@@ -116,7 +116,6 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
           body: JSON.stringify({id, name, price, description, imageBase64 }),
           headers: { 'Content-Type': 'application/json' },
         });
-        console.log({id, name, price, description, imageBase64 })
       }
       else {
         response = await fetch(url+`/products/update`, {
