@@ -1,22 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 // import { useAuth } from "@/context/AuthContext";
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
 export default function LoginPage() {
-  // Se asume que en el contexto de Auth dispones de 'signInInfo'
-    // const { signInInfo, setSignInInfo } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica para iniciar sesión
-    // if (signInInfo.email && signInInfo.password) {
-      // Aquí se podría llamar a la función de login
-      navigate('/home'); // Redirige al dashboard o ruta deseada
-    // }
+    const response = await login(email, password)
+    if (response) navigate('/home'); 
   };
 
   return (
@@ -77,8 +78,8 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   placeholder="tu@email.com"
-                //   value={signInInfo.email || ''}
-                //   onChange={(e) => setSignInInfo({ ...signInInfo, email: e.target.value })}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -87,8 +88,8 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type="password"
-                //   value={signInInfo.password || ''}
-                //   onChange={(e) => setSignInInfo({ ...signInInfo, password: e.target.value })}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 

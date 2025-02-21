@@ -26,6 +26,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   register: () => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
   updateProfile:  (username: string, shopname: string, address: string, imageBase64: string) => Promise<boolean>
   logout: () => Promise<void>;
   signUpInfo: SignUpUserInfo;
@@ -55,6 +56,34 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     address: null,
   })
   const url =  'https://ecommerceplantilla-back.fileit-contact.workers.dev/api';
+
+
+  const login = async (email: string, password: string) => { 
+    try {
+      const response = await fetch(url+'/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password}),
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+        return false
+      }
+
+      const data = await response.json();
+      setUser(data.user);
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+      return false
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const register = async () => {
     setLoading(true);
@@ -160,6 +189,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       user,
       loading,
       register, 
+      login,
       updateProfile,
       logout,
       signUpInfo,

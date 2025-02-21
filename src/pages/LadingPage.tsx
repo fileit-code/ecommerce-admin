@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Rocket, Check, Sparkles, Mail } from "lucide-react"
+import { useNavigate } from "react-router"
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Hero Section */}
@@ -19,7 +22,7 @@ export default function LandingPage() {
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Plataforma todo-en-uno para crear y gestionar tu ecommerce con inteligencia artificial
         </p>
-        <Button size="lg" className="gap-2 text-lg" onClick={() => window.location.href = 'https://ecommerce-admin-eyh.pages.dev/signin'}>
+        <Button size="lg" className="gap-2 text-lg" onClick={() => navigate('/signin')}>
             <Rocket className="h-5 w-5" />
             Comenzar gratis
         </Button>
