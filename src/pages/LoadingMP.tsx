@@ -6,7 +6,7 @@ export default function LoadingMP() {
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const code = params.get('code');
-    
+    console.log(code)
     const url =  'https://ecommerceplantilla-back.fileit-contact.workers.dev/api';
 
     useEffect(()=> {
@@ -15,6 +15,8 @@ export default function LoadingMP() {
                 credentials: 'include'
             });
             console.log(response)
+            const data = await response.json()
+            console.log(data)
         }
         callFunction();
     }, [])
